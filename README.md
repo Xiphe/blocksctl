@@ -10,7 +10,9 @@ Native builds and eight offline tests pass on macOS 15 Apple Silicon and Ubuntu 
 
 USB discovery, temporary upload, physical light/touch/MIDI interaction, clean Ctrl-C shutdown and return to the saved default passed on one Lightpad with firmware 1.1.0. BLOCKS Code and Dashboard were closed. [USB hardware QA](docs/verification/2026-11-06-usb-hardware.md)
 
-Bluetooth, saving a new default, disconnect handling and Linux hardware operation remain unverified. Local rebuilding on the development Mac remains blocked by its unaccepted Xcode licence; the CI-built executable runs without a local compiler.
+A further pass verified Bluetooth-only discovery and temporary upload, USB and Bluetooth disconnect/reconnect recovery, and `save-default` with a full power cycle. The saved baseline was then restored and checked after a second power cycle. [Bluetooth, recovery and persistence QA](docs/verification/2026-11-06-device-lifecycle.md)
+
+Hardware verification covers one Lightpad on macOS. Linux hardware operation, disconnects during transfer and long-duration reliability remain unverified. Local rebuilding on the development Mac remains blocked by its unaccepted Xcode licence; the CI-built executable runs without a local compiler.
 
 The published SDK provides the compiler and upload APIs. Their presence does not establish that this implementation works with a particular device firmware. [Source basis](docs/research/source-basis.md) records the pinned revisions and remaining verification work.
 
@@ -53,7 +55,7 @@ Temporary upload and saving the default are separate actions. `save-default` req
 
 ## Scope
 
-The initial workflow uses plain `.littlefoot` source files. Editor projects, Dashboard parameter metadata, image import, firmware updates and exporting an unknown program already on a device are outside the initial scope. Other BLOCKS models and Bluetooth require separate verification.
+The initial workflow uses plain `.littlefoot` source files. Editor projects, Dashboard parameter metadata, image import, firmware updates and exporting an unknown program already on a device are outside the initial scope. Other BLOCKS models, firmware versions and operating systems need separate hardware verification.
 
 ## Licence
 

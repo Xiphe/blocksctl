@@ -37,7 +37,7 @@ Native builds and eight offline tests passed on macOS 15 Apple Silicon and Ubunt
 
 Apple's compiler still requires the developer to review and accept the Xcode licence before rebuilding locally on the development machine. No licence was accepted or bypassed by this project.
 
-A [USB hardware QA pass](../verification/2026-11-06-usb-hardware.md) verified bounded discovery and explicit serial selection, temporary upload, physical light/touch/MIDI behaviour and return to the saved default after Ctrl-C on one Lightpad with firmware 1.1.0. Saving a new default and persistence after a power cycle still need a separate test. Bluetooth, disconnect handling and Linux hardware operation also remain unverified.
+A [USB hardware QA pass](../verification/2026-11-06-usb-hardware.md) verified bounded discovery and explicit serial selection, temporary upload, physical light/touch/MIDI behaviour and return to the saved default after Ctrl-C on one Lightpad with firmware 1.1.0. A further [device lifecycle pass](../verification/2026-11-06-device-lifecycle.md) verified Bluetooth-only operation, USB/Bluetooth session termination and explicit recovery after disconnects, and persistent saving plus baseline restoration across full power cycles. Linux hardware operation, disconnects during transfer, other devices/firmware and long-duration reliability remain unverified.
 
 The initial dependency versions precede some current firmware. Matching their program format and native functions to the selected firmware remains necessary. Newer public module code is available, but updating it is a separate compatibility decision. [Current module history](https://github.com/WeAreROLI/roli_blocks_basics/commits/main/)
 

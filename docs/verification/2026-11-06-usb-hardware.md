@@ -51,7 +51,7 @@ The saved default that returned was the feedback probe, not the separately archi
 
 The private QA record contains exact commands, compile/discovery/upload logs, source backups, and a timestamped MIDI capture. Its `result.json` SHA-256 is `9e410b3cbb6c27d133ec626fe6a231755e9504a0f23df8c50007a7f18c922f73`. The executable and all recorded source-backup hashes were checked against the local files when this report was prepared. Raw evidence is retained locally because it includes hardware identifiers and project-specific material.
 
-Still unverified:
+Not covered by this first pass:
 
 - Bluetooth discovery and upload.
 - `save-default` and persistence of a newly saved program across a power cycle.
@@ -59,4 +59,4 @@ Still unverified:
 - Hardware operation on Linux, other devices or other firmware versions.
 - Operation on a clean host with no ROLI software installed. This test closed BLOCKS Code and Dashboard; it was not an uninstall test.
 
-Returning to an existing saved default after Ctrl-C does not verify the separate `save-default` command. That command requires its own source upload and power-cycle test.
+Returning to an existing saved default after Ctrl-C does not verify the separate `save-default` command. A later [Bluetooth, recovery and persistence pass](2026-11-06-device-lifecycle.md) tested that command with a distinct source program and full power cycles, and also checked Bluetooth and disconnect/reconnect recovery. Lock contention, other devices/platforms and a clean-host test remain outside the recorded hardware checks.
