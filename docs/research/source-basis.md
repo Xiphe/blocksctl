@@ -1,46 +1,33 @@
 # Source basis
 
-Checked 6 November 2026. This note records public upstream sources for blocksctl and the limits of the initial hardware support.
+Checked 2026-11-06.
 
-## Pinned starting point
+| Dependency | Pinned revision |
+| --- | --- |
+| [BLOCKS-SDK](https://github.com/WeAreROLI/BLOCKS-SDK/tree/4582a4b4313e10be6f2d1412914ed8485fc7c010) | `4582a4b4313e10be6f2d1412914ed8485fc7c010` |
+| [roli_blocks_basics](https://github.com/WeAreROLI/roli_blocks_basics/tree/9a6df113bf570aec53d33cbf97938d8602e4ac2f) | `9a6df113bf570aec53d33cbf97938d8602e4ac2f`, SDK gitlink |
 
-| Dependency | Revision | Reason |
-| --- | --- | --- |
-| [BLOCKS-SDK](https://github.com/WeAreROLI/BLOCKS-SDK) | `4582a4b4313e10be6f2d1412914ed8485fc7c010` | Complete standalone SDK with platform build examples and a bundled ISC-licensed JUCE subset. |
-| [roli_blocks_basics](https://github.com/WeAreROLI/roli_blocks_basics) | `9a6df113bf570aec53d33cbf97938d8602e4ac2f` | Exact module revision pinned by that SDK's gitlink. |
+Standalone SDK dependency pair retained together. Module namespace is `roli`; older `juce::` examples require adaptation. [Gitlink](https://api.github.com/repos/WeAreROLI/BLOCKS-SDK/git/trees/4582a4b4313e10be6f2d1412914ed8485fc7c010?recursive=1), [module README](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/README.md)
 
-The standalone SDK provides an existing dependency pair to reproduce before trying newer modules or replacing transport code. The ROLI module moved out of JUCE and renamed its namespace from `juce` to `roli`. Old code examples therefore need checking against the pinned headers. [SDK tree with gitlink](https://api.github.com/repos/WeAreROLI/BLOCKS-SDK/git/trees/4582a4b4313e10be6f2d1412914ed8485fc7c010?recursive=1), [module README](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/README.md)
+Own source: ISC. Combined executable: GPLv3, with Corresponding Source. Four compiled interpolation files retain GPLv3/commercial terms despite ISC module declarations: `juce_GenericInterpolator.h`, `juce_Interpolators.h`, `juce_Interpolators.cpp`, `juce_WindowedSincInterpolator.cpp`. [Distribution](../../DISTRIBUTION.md), [notices](../../THIRD_PARTY.md)
 
-The SDK README's ISC description and module declarations are not a complete file-level licence audit. Release inspection found four compiled JUCE interpolation files with GPLv3/commercial notices. Their code remains in the tested executable, so the first binary release uses GPLv3 and provides complete Corresponding Source. blocksctl-authored source remains ISC. [Distribution terms](../../DISTRIBUTION.md), [file-level notice details](../../THIRD_PARTY.md)
+## Editor search
 
-The compiler, device native function table, topology discovery, remote heap synchronisation and upload logic are public source. A native host can reuse them without invoking the BLOCKS Code desktop app. [Compiler](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/littlefoot/roli_LittleFootCompiler.h), [topology interface](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/topology/roli_PhysicalTopologySource.h), [Block interface](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/blocks/roli_Block.h), [upload implementation](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/topology/internal/roli_BlockImplementation.cpp)
+| Evidence | Finding / bound |
+| --- | --- |
+| Reachable official history, removed paths included | 571 SDK commits + 93 module commits; no complete BLOCKS Code IDE. Private/deleted repositories and unreachable history excluded. |
+| [Guide imported 2021-05-10](https://github.com/WeAreROLI/BLOCKS-SDK/blob/aecfb72e2b5e82ce0949fad671dc7764ebbc534c/docs/getting_started_with_blocks_code.html) | Links 0.2.3; unchanged in reachable history. Does not establish the latest application release. |
 
-## Why a small native tool
+SDK reuse excludes editor UI/project handling from blocksctl's initial scope. [Published investigation](https://github.com/Xiphe/blocksctl/blob/18b642501399e5206d412731b27655f3c254035a/docs/research/source-basis.md)
 
-The public SDK contains the parts needed to compile source and communicate with a device. Reusing those parts keeps editor project handling and UI state outside this tool's initial scope.
+## SDK contracts
 
-A search of complete reachable history in the official BLOCKS-SDK and roli_blocks_basics repositories found no complete BLOCKS Code editor application. That search included removed paths, 571 SDK commits and 93 module commits. It does not exclude private repositories, deleted repositories or unreachable source history. [SDK history](https://github.com/WeAreROLI/BLOCKS-SDK/commits/master/), [module history](https://github.com/WeAreROLI/roli_blocks_basics/commits/main/)
+| Operation | Contract / source |
+| --- | --- |
+| Compile | Offline; source + native prototypes + heap. Base heap 512 bytes for compile/upload; source `#heapsize: N` overrides it. [Compiler](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/littlefoot/roli_LittleFootCompiler.h) |
+| Discover | Active protocol exchange/API mode; requires event dispatch. Empty topology alone cannot distinguish absence, contention or stalled dispatch. [Detector](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/topology/internal/roli_MIDIDeviceDetector.cpp), [API mode](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/topology/internal/roli_ConnectedDeviceGroup.cpp), [Mac host](https://github.com/WeAreROLI/BLOCKS-SDK/blob/4582a4b4313e10be6f2d1412914ed8485fc7c010/examples/BlockFinder/MacOS/main.mm) |
+| Upload | Public compiler, native table, topology and remote-heap synchronisation; no BLOCKS Code dependency. Temporary session stays attached until Ctrl-C. [Implementation](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/topology/internal/roli_BlockImplementation.cpp) |
+| Save | `save-default SOURCE` uploads and requests persistence in one process. Loaded callback supplies no flash acknowledgement; verify behaviour/power cycle. [Implementation](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/topology/internal/roli_BlockImplementation.cpp) |
+| Readback | `getProgram()` returns the host object; no arbitrary device-program export. [Interface](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/blocks/roli_Block.h) |
 
-The official BLOCKS Code guide links to version 0.2.3. The file entered the SDK repository on 10 May 2021 with those links already present and has no subsequent change in the reachable history. This is evidence about that download page, not proof that no later application release exists. [Imported guide](https://github.com/WeAreROLI/BLOCKS-SDK/blob/aecfb72e2b5e82ce0949fad671dc7764ebbc534c/docs/getting_started_with_blocks_code.html)
-
-## Protocol boundaries
-
-Compilation is offline. It needs a source file, heap allocation and the native function prototypes; it does not need a connected device.
-
-blocksctl uses the SDK's 512-byte default heap for both standalone compilation and upload. The compiler honours a source `#heapsize: N` directive. Keeping those inputs aligned avoids silently compiling a different memory layout for a device upload. [Compiler](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/littlefoot/roli_LittleFootCompiler.h), [upload implementation](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/topology/internal/roli_BlockImplementation.cpp)
-
-SDK discovery actively exchanges messages with devices and can enter API mode. A host must dispatch the event loop and report SDK lock contention. An empty device list alone cannot distinguish no device from contention or a stalled host. The official macOS BlockFinder example runs a native event loop without requiring an editor window. [Mac example](https://github.com/WeAreROLI/BLOCKS-SDK/blob/4582a4b4313e10be6f2d1412914ed8485fc7c010/examples/BlockFinder/MacOS/main.mm), [detector implementation](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/topology/internal/roli_MIDIDeviceDetector.cpp), [connected device group](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/topology/internal/roli_ConnectedDeviceGroup.cpp)
-
-Temporary upload and saving a default are separate operations. `upload` keeps its host session open after transfer, with Ctrl-C ending that session. `save-default` takes a source file and uploads it with the SDK's default-save persistency in the same process. The loaded callback confirms that the SDK issued the save request, not a flash acknowledgement. Device behaviour and persistence after a power cycle require hardware verification. Reading the host's current program object does not export an arbitrary program already stored on the device. [Block interface](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/blocks/roli_Block.h), [Block implementation](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/topology/internal/roli_BlockImplementation.cpp)
-
-## Verification
-
-Native builds and eight offline tests passed on macOS 15 Apple Silicon and Ubuntu 24.04. The CI-built Mac binary also passed the offline suite on the development Mac and reproduced a known BLOCKS Code payload with matched heap settings. [Verification record](../verification/2026-11-06.md)
-
-Apple's compiler still requires the developer to review and accept the Xcode licence before rebuilding locally on the development machine. No licence was accepted or bypassed by this project.
-
-A [USB hardware QA pass](../verification/2026-11-06-usb-hardware.md) verified bounded discovery and explicit serial selection, temporary upload, physical light/touch/MIDI behaviour and return to the saved default after Ctrl-C on one Lightpad with firmware 1.1.0. A further [device lifecycle pass](../verification/2026-11-06-device-lifecycle.md) verified Bluetooth-only operation, USB/Bluetooth session termination and explicit recovery after disconnects, and persistent saving plus baseline restoration across full power cycles. Linux hardware operation, disconnects during transfer, other devices/firmware and long-duration reliability remain unverified.
-
-The initial dependency versions precede some current firmware. Matching their program format and native functions to the selected firmware remains necessary. Newer public module code is available, but updating it is a separate compatibility decision. [Current module history](https://github.com/WeAreROLI/roli_blocks_basics/commits/main/)
-
-[THIRD_PARTY.md](../../THIRD_PARTY.md) records licence and notice requirements for the pinned source.
+[Offline verification](../verification/2026-11-06.md): native macOS/Linux builds, eight tests, matched-heap reference bytecode parity. [USB](../verification/2026-11-06-usb-hardware.md) and [lifecycle](../verification/2026-11-06-device-lifecycle.md): one Lightpad, firmware 1.1.0. Other firmware requires program/native-function compatibility checks; newer modules require separate validation.

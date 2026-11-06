@@ -1,37 +1,30 @@
-# Distribution terms
+# Distribution
 
-blocksctl's own source files are licensed under the [ISC licence](LICENSE). Dependencies keep their original notices and licence terms. The repository does not relicense upstream files as ISC.
+| Material | Terms |
+| --- | --- |
+| blocksctl-authored source | [ISC](LICENSE) |
+| v0.1.0 combined executable | [GPLv3](LICENSES/GPL-3.0.txt) |
+| Vendored source | Original file-level notices; [dependency inventory](THIRD_PARTY.md) |
 
-## Combined executable
+## Binary licence
 
-The v0.1.0 macOS executable includes JUCE interpolation code whose original headers offer GPLv3 as an alternative to a commercial licence. This release uses the GPLv3 option and distributes the combined executable under the [GNU General Public License, version 3](LICENSES/GPL-3.0.txt).
+The tested binary retains code from [four JUCE interpolator files](THIRD_PARTY.md#file-level-terms) offering GPLv3 or commercial terms. This distribution selects GPLv3. Module-level ISC declarations do not override their headers.
 
-These four files have the relevant original notices:
+## Release contents
 
-- `vendor/sdk/juce_audio_basics/utilities/juce_GenericInterpolator.h`
-- `vendor/sdk/juce_audio_basics/utilities/juce_Interpolators.h`
-- `vendor/sdk/juce_audio_basics/utilities/juce_Interpolators.cpp`
-- `vendor/sdk/juce_audio_basics/utilities/juce_WindowedSincInterpolator.cpp`
+| Asset | Contents |
+| --- | --- |
+| `blocksctl-0.1.0-macos-arm64.tar.gz` | Executable, install instructions, notices, `BUILD-INFO.json` |
+| `blocksctl-0.1.0-source.tar.gz` | Complete Corresponding Source, pinned dependencies, notices, build and test scripts |
+| `SHA256SUMS` | Both archive checksums |
 
-They are included by the audio-basics module compiled into the tested executable. The module-level ISC declaration does not replace their file-level terms. The release audit found the interpolation lookup table in the executable, so the binary package is not described as ISC-only.
+All three are on the [same release](https://github.com/Xiphe/blocksctl/releases/tag/v0.1.0).
 
-The binary archive includes GPLv3 as `LICENSE`, the project's ISC notice as `LICENSE-ISC.txt`, and the ROLI, JUCE, zlib and C++ library notices under `notices/`. These notices grant no warranty. [THIRD_PARTY.md](THIRD_PARTY.md) records the dependency revisions and source locations.
+The binary package's `LICENSE` is GPLv3; `LICENSE-ISC.txt` covers our code. `notices/` contains ROLI, JUCE, zlib and C++ library notices. macOS frameworks and the system C++ runtime are external platform dependencies.
 
-## Corresponding Source
+## Provenance
 
-The [v0.1.0 release](https://github.com/Xiphe/blocksctl/releases/tag/v0.1.0) offers `blocksctl-0.1.0-source.tar.gz` alongside the binary archive, with checksums for both in `SHA256SUMS`. That source archive contains the project source, pinned dependency source, retained upstream notices, CMake build configuration, workflow and test scripts. It is the Corresponding Source provided with this executable distribution.
-
-The executable was built from revision `61f792060926d6773242bb02caf2a0adf724c2a8`. The packaging script checks that the release revision's `src/`, `vendor/` and `CMakeLists.txt` are unchanged from that build revision before it accepts the tested binary. The archive's `BUILD-INFO.json` identifies both revisions and the binary hash. Later documentation, packaging and notice changes are included in the source archive.
-
-After extracting the source archive on a Mac with an available Apple toolchain and CMake, use:
-
-```sh
-python3 scripts/verify_vendor.py
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --parallel
-ctest --test-dir build --output-on-failure
-```
-
-macOS system frameworks and the system C++ runtime are platform dependencies, not bundled third-party binaries. Building from source requires those platform tools; running the downloaded executable does not require a compiler or a ROLI desktop application.
-
-When redistributing the binary, retain the licence notices and provide the corresponding source as required by GPLv3. [GPLv3 sections 5 and 6](https://www.gnu.org/licenses/gpl-3.0.html) describe source and object-code distribution terms.
+- Executable build: `61f792060926d6773242bb02caf2a0adf724c2a8`.
+- Packaging requires identical `src/`, `vendor/` and `CMakeLists.txt` at the release revision.
+- `BUILD-INFO.json` records both revisions and the binary hash.
+- [Build from source](docs/build.md); [GPLv3 distribution requirements, sections 5 and 6](https://www.gnu.org/licenses/gpl-3.0.html).
