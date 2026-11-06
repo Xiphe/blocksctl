@@ -1,0 +1,13 @@
+{
+  "version": "0.1.0",
+  "tag": "v0.1.0",
+  "platform": "macos",
+  "architecture": "arm64",
+  "minimum_macos": "15.0.0",
+  "binary_sha256": "6d6e9ff9ba33205ab839fb0f9ad8a927b750d03436d2c0ebfae922dc708249e4",
+  "binary_build_revision": "61f792060926d6773242bb02caf2a0adf724c2a8",
+  "binary_build_run": "https://github.com/Xiphe/blocksctl/actions/runs/42254790783",
+  "binary_license": "GPL-3.0-only",
+  "project_source_license": "ISC",
+  "signature": "ad-hoc linker signature; no Developer ID or Apple notarization"
+}

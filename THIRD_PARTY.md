@@ -12,6 +12,12 @@ The upstream README describes this standalone SDK as ISC licensed. Its bundled J
 
 The vendored tree also contains code under other licences. Bundled Oboe uses Apache License 2.0; bundled zlib carries its zlib licence notice. Those notices remain in the dependency source, including [Oboe's licence](vendor/sdk/juce_audio_devices/native/oboe/LICENSE) and [zlib's README](vendor/sdk/juce_core/zip/zlib/README). The ISC module declarations do not replace those ancillary notices. Build dependencies should include only what the selected target needs.
 
+### GPLv3 interpolation files
+
+The release audit found four additional exceptions to the module-level ISC declarations: `juce_GenericInterpolator.h`, `juce_Interpolators.h`, `juce_Interpolators.cpp` and `juce_WindowedSincInterpolator.cpp` under `vendor/sdk/juce_audio_basics/utilities/`. Their headers offer GPLv3 or commercial terms. This project uses the GPLv3 option. The tested macOS executable retains code from these files, so the combined executable is distributed under GPLv3, with complete Corresponding Source beside it. The project-authored source remains ISC licensed. [GPLv3 text](LICENSES/GPL-3.0.txt), [distribution terms](DISTRIBUTION.md)
+
+The release package retains the original interpolation notices and the Raw Material Software ISC module headers, ROLI's ISC notice, and zlib's original header and README. A [libc++ licence and notice copy](LICENSES/libcxx.txt) is also provided for attribution to C++ library implementations. The system runtime itself is not bundled. The source of that notice copy is [LLVM's libc++ licence file](https://github.com/llvm/llvm-project/blob/llvmorg-19.1.2/libcxx/LICENSE.TXT).
+
 ## ROLI BLOCKS module
 
 Source: [WeAreROLI/roli_blocks_basics](https://github.com/WeAreROLI/roli_blocks_basics)
