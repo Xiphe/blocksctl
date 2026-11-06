@@ -6,13 +6,15 @@ blocksctl reuses ROLI's public compiler and device SDK. Its native implementatio
 
 ## Status
 
-This is an initial source implementation. A native build has not been verified because the development machine's Xcode licence has not been accepted. Hardware discovery, upload and persistence have not been validated. Review and accept the Xcode licence yourself before building with Apple's toolchain.
+Native builds and eight offline tests pass on macOS 15 Apple Silicon and Ubuntu 24.04. The CI-built Mac executable also passes the tests on the development Mac. With a matching heap directive, it reproduces a known BLOCKS Code payload byte for byte. [Verification record](docs/verification/2026-11-06.md)
+
+Hardware discovery, upload and persistence have not been validated. Local rebuilding on the development Mac remains blocked by its unaccepted Xcode licence; the CI-built executable runs without a local compiler.
 
 The published SDK provides the compiler and upload APIs. Their presence does not establish that this implementation works with a particular device firmware. [Source basis](docs/research/source-basis.md) records the pinned revisions and remaining verification work.
 
 ## Build
 
-The first target is macOS, with an accepted Xcode toolchain licence, a C++17 compiler, CMake and Python 3 for the smoke test. Linux build support is also intended. On Ubuntu, install `libasound2-dev`, `libx11-dev` and `pkg-config` alongside the compiler and build tools. Linux hardware support remains unverified.
+The first target is macOS, with an accepted Xcode toolchain licence, a C++17 compiler, CMake and Python 3 for the smoke test. Linux builds are checked on Ubuntu 24.04. On Ubuntu, install `libasound2-dev` and `pkg-config` alongside the compiler and build tools. Linux hardware support remains unverified.
 
 ```sh
 cmake -S . -B build
@@ -21,6 +23,8 @@ ctest --test-dir build --output-on-failure
 ```
 
 The executable is `build/blocksctl`. The smoke test covers local compilation and command validation. It does not contact hardware.
+
+[GitHub Actions](https://github.com/Xiphe/blocksctl/actions/workflows/build.yml) builds executables and attaches them to successful runs. These are development artifacts, not a signed release. Download the artifact for your operating system and architecture. Dependency file hashes can be checked with `python3 scripts/verify_vendor.py`.
 
 ## Commands
 

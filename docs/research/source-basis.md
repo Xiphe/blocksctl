@@ -1,6 +1,6 @@
 # Source basis
 
-Checked 6 November 2026. This note records public upstream sources for blocksctl. It does not establish native build or hardware compatibility.
+Checked 6 November 2026. This note records public upstream sources for blocksctl and the limits of the initial hardware support.
 
 ## Pinned starting point
 
@@ -31,11 +31,13 @@ SDK discovery actively exchanges messages with devices and can enter API mode. A
 
 Temporary upload and saving a default are separate operations. `upload` keeps its host session open after transfer, with Ctrl-C ending that session. `save-default` takes a source file and uploads it with the SDK's default-save persistency in the same process. The loaded callback confirms that the SDK issued the save request, not a flash acknowledgement. Device behaviour and persistence after a power cycle require hardware verification. Reading the host's current program object does not export an arbitrary program already stored on the device. [Block interface](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/blocks/roli_Block.h), [Block implementation](https://github.com/WeAreROLI/roli_blocks_basics/blob/9a6df113bf570aec53d33cbf97938d8602e4ac2f/topology/internal/roli_BlockImplementation.cpp)
 
-## Remaining verification
+## Verification
 
-The native build is unverified. Apple's compiler requires the developer to review and accept the Xcode licence on the development machine before the build can proceed.
+Native builds and eight offline tests passed on macOS 15 Apple Silicon and Ubuntu 24.04. The CI-built Mac binary also passed the offline suite on the development Mac and reproduced a known BLOCKS Code payload with matched heap settings. [Verification record](../verification/2026-11-06.md)
 
-The first validation should compile small programs offline, compare diagnostics and bytecode with an independent known compiler, and record heap and native-function compatibility. Device work should then verify bounded discovery and explicit serial selection, temporary upload and visible behaviour, followed separately by saving a default and testing a power cycle. No hardware operation has validated blocksctl yet.
+Apple's compiler still requires the developer to review and accept the Xcode licence before rebuilding locally on the development machine. No licence was accepted or bypassed by this project.
+
+Device work must verify bounded discovery and explicit serial selection, temporary upload and visible behaviour, followed separately by saving a default and testing a power cycle. No hardware operation has validated blocksctl yet.
 
 The initial dependency versions precede some current firmware. Matching their program format and native functions to the selected firmware remains necessary. Newer public module code is available, but updating it is a separate compatibility decision. [Current module history](https://github.com/WeAreROLI/roli_blocks_basics/commits/main/)
 
