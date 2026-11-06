@@ -1,0 +1,8 @@
+.DS_Store
+/build/
+/build-*/
+/.deps/
+/_deps/
+/.venv/
+__pycache__/
+*.py[cod]

@@ -1,0 +1,33 @@
+name: Build and offline checks
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-14, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify retained dependency source
+        run: python3 scripts/verify_vendor.py
+      - name: Linux dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev pkg-config
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build --parallel 2
+      - name: Test offline commands
+        run: ctest --test-dir build --output-on-failure
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: blocksctl-${{ runner.os }}-${{ runner.arch }}
+          path: build/blocksctl

@@ -1,0 +1,18 @@
+// SPDX-License-Identifier: ISC
+int touches;
+
+void initialise()
+{
+    touches = 0;
+}
+
+void repaint()
+{
+    fillPixel(0xff2255aa, 0, 0);
+}
+
+void touchStart(int index, float x, float y, float z, float vz)
+{
+    touches = touches + 1;
+    sendCC(0, 20, 127);
+}
