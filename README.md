@@ -8,7 +8,9 @@ blocksctl reuses ROLI's public compiler and device SDK. Its native implementatio
 
 Native builds and eight offline tests pass on macOS 15 Apple Silicon and Ubuntu 24.04. The CI-built Mac executable also passes the tests on the development Mac. With a matching heap directive, it reproduces a known BLOCKS Code payload byte for byte. [Verification record](docs/verification/2026-11-06.md)
 
-Hardware discovery, upload and persistence have not been validated. Local rebuilding on the development Mac remains blocked by its unaccepted Xcode licence; the CI-built executable runs without a local compiler.
+USB discovery, temporary upload, physical light/touch/MIDI interaction, clean Ctrl-C shutdown and return to the saved default passed on one Lightpad with firmware 1.1.0. BLOCKS Code and Dashboard were closed. [USB hardware QA](docs/verification/2026-11-06-usb-hardware.md)
+
+Bluetooth, saving a new default, disconnect handling and Linux hardware operation remain unverified. Local rebuilding on the development Mac remains blocked by its unaccepted Xcode licence; the CI-built executable runs without a local compiler.
 
 The published SDK provides the compiler and upload APIs. Their presence does not establish that this implementation works with a particular device firmware. [Source basis](docs/research/source-basis.md) records the pinned revisions and remaining verification work.
 
